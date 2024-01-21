@@ -15,6 +15,7 @@ export const authVal = {
     Address: Joi.string().trim(),
     Phone: Joi.string().trim().pattern(/^[0-9]{10}$/),
     Email: Joi.string().trim().lowercase().email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "org"] } }),
+    Role: Joi.string().trim(),
   }),
 };
 
@@ -28,11 +29,12 @@ export const authUpVal = {
     Password: Joi.string().trim(),
     CardNumber: Joi.string().trim().pattern(/^[a-zA-Z0-9]{10}$/),
     Name: Joi.string().trim(),
-    Sex: Joi.string().valid("male", "female", "other").default("Not-defined"),
+    Sex: Joi.string().valid("male", "female", "other"),
     DOB: Joi.date().max("now"),
     Address: Joi.string().trim(),
     Phone: Joi.string().trim().pattern(/^[0-9]{10}$/),
     Email: Joi.string().trim().lowercase().email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "org"] } }),
+    Role: Joi.string().trim(),
   }),
 };
 

@@ -31,6 +31,38 @@ export const authCreate = async (req, res) => {
       auth.Profile = profile.secure_url;
     }
 
+    /** Check if the card number is unique */
+    if (req.body.CardNumber) {
+      const existingCardNumber = await Auth.findOne({
+        CardNumber: auth.CardNumber,
+        _id: { $ne: auth._id },
+      });
+
+      if (existingCardNumber) {
+        return res.status(400).json({
+          StatusCode: 4,
+          Success: false,
+          Message: `Card number must be unique.`,
+        });
+      }
+    }
+
+    /** Check if the mobile number is unique */
+    if (req.body.Phone) {
+      const existingUser = await Auth.findOne({
+        Phone: auth.Phone,
+        _id: { $ne: auth._id },
+      });
+
+      if (existingUser) {
+        return res.status(400).json({
+          StatusCode: 4,
+          Success: false,
+          Message: `Mobile number must be unique.`,
+        });
+      }
+    }
+
     /** Save Data into MongoDB Database */
     const result = await auth.save();
     if (!result) {
@@ -90,6 +122,8 @@ export const authList = async (req, res) => {
       Data: Lists,
     });
   } catch (error) {
+    await disconnectDB();
+
     logger.error({
       StatusCode: 1,
       Message: error.message,
@@ -124,9 +158,29 @@ export const authUpdate = async (req, res) => {
       });
     }
 
-    const authUpdate = await Auth.findByIdAndUpdate(req.params._Id, {
-      $set: req.body,
-    });
+    /** Check if the mobile number is unique */
+    if (req.body.Phone) {
+      const existingUser = await Auth.findOne({
+        Phone: req.body.Phone,
+        _id: { $ne: req.params._Id },
+      });
+
+      if (existingUser) {
+        return res.status(400).json({
+          StatusCode: 4,
+          Success: false,
+          Message: "Mobile number must be unique.",
+        });
+      }
+    }
+
+    const authUpdate = await Auth.findByIdAndUpdate(
+      req.params._Id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
     if (!authUpdate) {
       logger.error({
         StatusCode: 4,
@@ -200,6 +254,8 @@ export const authDel = async (req, res) => {
       Data: authDelete,
     });
   } catch (error) {
+    await disconnectDB();
+
     logger.error({
       StatusCode: 1,
       Message: error.message,
@@ -263,6 +319,8 @@ export const authLogin = async (req, res) => {
       data: user,
     });
   } catch (error) {
+    await disconnectDB();
+
     logger.error({
       StatusCode: 1,
       Message: error.message,
