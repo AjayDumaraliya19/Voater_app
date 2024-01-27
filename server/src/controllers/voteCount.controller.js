@@ -84,7 +84,7 @@ export const voteList = async (req, res) => {
 
     const voteList = await Vote.find()
       .populate({ path: "Auth", select: "-Password -AccessToken" })
-      .populate("Party");
+      .populate({ path: "Party" });
     if (!voteList || voteList.length === 0) {
       logger.error({
         StatusCode: 4,
@@ -107,6 +107,7 @@ export const voteList = async (req, res) => {
       Success: true,
       Message: `Votes retrieved successfully..!`,
       Data: voteList,
+      // total: totalCount,
     });
   } catch (error) {
     logger.error({
