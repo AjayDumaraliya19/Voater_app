@@ -10,20 +10,21 @@ const Login = () => {
   const Password = useRef();
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const data = {
       Email: Email.current.value,
       Password: Password.current.value,
     };
 
-    axios
+    console.log(data, "==== Login Data ====");
+    await axios
       .post(BASE_URL + LOGIN_URL, data)
       .then((res) => {
         console.log("response loggin auth", res);
         Cookies.set("Role", res.data.data.Role);
         Cookies.set("Name", res.data.data.Name);
         Cookies.set("Profile", res.data.data.Profiel);
-        window.location = "/dashbord";
+        window.location = "/dashboard";
       })
       .catch((error) => {
         console.log("login jsx error", error.message);
@@ -46,7 +47,7 @@ const Login = () => {
               </p>
             </div>
 
-            <form action="post">
+            <form>
               <div className="mt-10 grid grid-col-1 gap-x-6 gap-y-6 sm:grid-col-6">
                 <div className="relative col-span-full">
                   <i className="input-icon fi fi-rr-envelope"></i>
@@ -84,7 +85,7 @@ const Login = () => {
                 <input
                   type="submit"
                   value="Login"
-                  onClick={handleLogin}
+                  onClick={() => handleLogin()}
                   className="rounded-full w-full bg-gray-950 px-3 py-3 text-lg font-semibold text-white shadow-sm hover:bg-gray-800"
                 />
               </div>
