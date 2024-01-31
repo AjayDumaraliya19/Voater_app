@@ -53,7 +53,6 @@ export const electionVal = {
   body: Joi.object().keys({
     ElectionName: Joi.string().trim(),
     RegisterDate: Joi.date(),
-    Party: Joi.string().trim(),
   }),
 };
 
@@ -65,7 +64,6 @@ export const electionUpVal = {
   body: Joi.object().keys({
     ElectionName: Joi.string().trim(),
     RegisterDate: Joi.date(),
-    Party: Joi.string().trim(),
   }),
 };
 

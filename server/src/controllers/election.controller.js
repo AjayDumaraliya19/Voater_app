@@ -8,7 +8,7 @@ export const electionCreate = async (req, res) => {
     await connectDB();
 
     const { ElectionName } = req.body;
-    const findName = await Election.findOne({ ElectionName }).populate("Party");
+    const findName = await Election.findOne({ ElectionName });
     if (!findName && findName === 0) {
       logger.error({
         StatusCode: 4,
@@ -59,7 +59,7 @@ export const electionList = async (req, res) => {
   try {
     await connectDB();
 
-    const Lists = await Election.find().populate("Party");
+    const Lists = await Election.find();
     if (!Lists) {
       logger.error({
         StatusCode: 4,
@@ -98,9 +98,7 @@ export const electionUpdate = async (req, res) => {
     await connectDB();
 
     /** Find election By ID */
-    const electionExists = await Election.findById(req.params._Id).populate(
-      "Party"
-    );
+    const electionExists = await Election.findById(req.params._Id)
     if (!electionExists) {
       logger.error({
         StatusCode: 4,
