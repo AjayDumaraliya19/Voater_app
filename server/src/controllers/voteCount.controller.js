@@ -1,6 +1,5 @@
 import { Vote } from "../models/vote.model.js";
 import { Auth } from "../models/auth.model.js";
-import { connectDB, disconnectDB } from "../db/dbconnection.js";
 import { logger } from "../middlewares/logger.js";
 
 /** Createa Vote controller */
@@ -75,7 +74,6 @@ export const voteCreate = async (req, res) => {
       Data: voteQuery,
     });
   } catch (error) {
-    await disconnectDB();
 
     logger.error({
       StatusCode: 1,
@@ -119,7 +117,6 @@ export const voteList = async (req, res) => {
       // total: totalCount,
     });
   } catch (error) {
-    await disconnectDB();
 
     logger.error({
       StatusCode: 1,
@@ -173,7 +170,6 @@ export const voteDel = async (req, res) => {
       Data: result,
     });
   } catch (error) {
-    await disconnectDB();
 
     logger.error({
       StatusCode: 1,
